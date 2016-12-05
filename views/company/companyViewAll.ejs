@@ -12,7 +12,7 @@
     <tr>
         <td><a href="/company/?company_id=<%= result[i].company_id %>"><%= result[i].company_name %></a></td>
 
-    <td><form action="/company/delete/">
+        <td><form action="/company/delete/">
             <input type="hidden" name="company_id" id="company_id" value="<%= result[i].company_id %>" />
             <input type="submit" value="Delete"/>
         </form>
