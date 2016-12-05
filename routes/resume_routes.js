@@ -14,7 +14,6 @@ router.get('/all', function(req, res) {
             res.render('resume/resumeViewAll', { 'result':result });
         }
     });
-
 });
 
 // View the resume for the given id
@@ -87,6 +86,5 @@ router.get('/delete', function(req, res){
         });
     }
 });
-
 
 module.exports = router;
