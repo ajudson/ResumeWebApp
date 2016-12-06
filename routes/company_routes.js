@@ -73,7 +73,7 @@ router.get('/delete', function(req, res){
         res.send('company_id is null');
     }
     else {
-        commpany_dal.delete(req.query.company_id, function(err, result){
+        company_dal.delete(req.query.company_id, function(err, result){
             if(err) {
                 res.send(err);
             }
