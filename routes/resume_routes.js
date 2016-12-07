@@ -69,7 +69,41 @@ router.get('/insert', function(req, res){
     }
 });
 
-// Delete a resume for the given school_id
+router.get('/edit', function(req, res){
+    if(req.query.resume_id == null) {
+        res.send('A resume id is required');
+    }
+    else {
+        resume_dal.edit(req.query.resume_id, function(err, result){
+            console.log(result);
+            res.render('resume/resumeUpdate', {resume: result[0][0], skill: result[1]});
+        });
+    }
+
+});
+
+router.get('/edit2', function(req, res){
+    if(req.query.resume_id == null) {
+        res.send('A resume id is required');
+    }
+    else {
+        resume_dal.getById(req.query.resume_id, function(err, skill){
+            resume_dal.getAll(function(err, skill) {
+                res.render('resume/resumeUpdate', {resume: resume[0], skill: skill});
+            });
+        });
+    }
+
+});
+
+router.get('/update', function(req, res) {
+    resume_dal.update(req.query, function(err, result){
+        res.redirect(302, '/resume/all');
+    });
+});
+
+
+// Delete a resume for the given resume_id
 router.get('/delete', function(req, res){
     if(req.query.resume_id == null) {
         res.send('resume_id is null');
