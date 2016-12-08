@@ -95,7 +95,7 @@ var companyAddressDeleteAll = function(company_id, callback){
     var queryData = [company_id];
 
     connection.query(query, queryData, function(err, result) {
-        callback(err, result);
+            callback(err, result);
     });
 };
 //export the same function so it can be used by external callers

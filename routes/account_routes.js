@@ -72,6 +72,33 @@ router.get('/insert', function(req, res){
     }
 });
 
+router.get('/edit', function(req, res){
+    if(req.query.company_id == null) {
+        res.send('A company id is required');
+    }
+    else {
+        company_dal.edit(req.query.company_id, function(err, result){
+            console.log(result);
+            res.render('company/companyUpdate', {company: result[0][0], address: result[1]});
+        });
+    }
+
+});
+
+router.get('/edit2', function(req, res){
+    if(req.query.company_id == null) {
+        res.send('A company id is required');
+    }
+    else {
+        company_dal.getById(req.query.company_id, function(err, company){
+            address_dal.getAll(function(err, address) {
+                res.render('company/companyUpdate', {company: company[0], address: address});
+            });
+        });
+    }
+
+});
+
 // Delete an account for the given account_id
 router.get('/delete', function(req, res){
     if(req.query.account_id == null) {
