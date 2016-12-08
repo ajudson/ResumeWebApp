@@ -59,7 +59,6 @@ exports.insert = function(params, callback) {
             callback(err, result);
         });
     });
-
 };
 
 exports.delete = function(company_id, callback) {

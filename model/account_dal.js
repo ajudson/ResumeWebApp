@@ -34,6 +34,28 @@ exports.insert = function(params, callback) {
 
 };
 
+exports.update = function(params, callback) {
+    var query = 'UPDATE account SET first_name = ? WHERE account_id = ?; UPDATE account SET last_name = ? WHERE account_id = ?; UPDATE acount SET email = ? WHERE account_id = ?';
+
+    var queryData = [params.first_name, params.last_name, params.email, params.account_id];
+
+    connection.query(query, queryData, function(err, result) {
+        //delete account entries for this account
+        account.delete(params.account_id, function(err, result){
+
+            if(params.account_id != null) {
+                //insert account
+                account.insert(params.first_name, params.last_name, params.email, function(err, result){
+                    callback(err, result);
+                });}
+            else {
+                callback(err, result);
+            }
+        });
+
+    });
+};
+
 exports.delete = function(account_id, callback) {
     var query = 'DELETE FROM account WHERE account_id = ?';
     var queryData = [account_id];
@@ -42,4 +64,14 @@ exports.delete = function(account_id, callback) {
         callback(err, result);
     });
 
+};
+
+
+exports.edit = function(account_id, callback) {
+    var query = 'SELECT * FROM account';
+    var queryData = [account_id];
+
+    connection.query(query, queryData, function(err, result) {
+        callback(err, result);
+    });
 };

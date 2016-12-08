@@ -27,13 +27,16 @@ exports.getById = function(resume_id, callback) {
 };
 
 exports.insert = function(params, callback) {
-
+//NEED TO HAVE NESTED FUNCTION CALLS, 4 NESTED FUNCTIONS: ACCOUNTS, SKILLS, COMPANIES, SCHOOLS
     // FIRST INSERT THE RESUME
-    var query = 'INSERT INTO resume (resume_name) VALUES (?)';
+    var query = 'INSERT INTO resume (resume_name, account_id) VALUES (?, ?)';
 
-    var queryData = [params.resume_name];
+    var queryData = [params.resume_name, params.account_id];
 
-    connection.query(query, params.resume_name, function(err, result) {
+    connection.query(query, queryData, function(err, result) {
+        if(err) {
+            console.log(err);
+        }
 
         // THEN USE THE RESUME_ID RETURNED AS insertId AND THE SELECTED SKILL_IDs INTO RESUME_SKILL
         var resume_id = result.insertId;
@@ -49,6 +52,11 @@ exports.insert = function(params, callback) {
 
         // NOTE THE EXTRA [] AROUND resumeSkillData
         connection.query(query, [resumeSkillData], function(err, result){
+            // insert your resume companies() {function(){
+                    //insert your resume schools(){ function(){
+                        //callback(err, result)
+                    //}
+            //
             callback(err, result);
         });
     });

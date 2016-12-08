@@ -45,13 +45,13 @@ router.get('/add', function(req, res){
             skill_dal.getAll(function(err,skill) {
                 school_dal.getAll(function(err,school) {
 
-
         if (err) {
             res.send(err);
         }
         else {
             res.render('resume/resumeAdd', {'account': account, 'company': company, 'skill': skill, 'school': school});
         }
+
                 });
             });
         });

@@ -73,26 +73,26 @@ router.get('/insert', function(req, res){
 });
 
 router.get('/edit', function(req, res){
-    if(req.query.company_id == null) {
-        res.send('A company id is required');
+    if(req.query.account_id == null) {
+        res.send('A account id is required');
     }
     else {
-        company_dal.edit(req.query.company_id, function(err, result){
+        account_dal.edit(req.query.account_id, function(err, result){
             console.log(result);
-            res.render('company/companyUpdate', {company: result[0][0], address: result[1]});
+            res.render('account/accountUpdate', {account: result[0][0]});
         });
     }
 
 });
 
 router.get('/edit2', function(req, res){
-    if(req.query.company_id == null) {
-        res.send('A company id is required');
+    if(req.query.account_id == null) {
+        res.send('A account id is required');
     }
     else {
-        company_dal.getById(req.query.company_id, function(err, company){
-            address_dal.getAll(function(err, address) {
-                res.render('company/companyUpdate', {company: company[0], address: address});
+        account_dal.getById(req.query.account_id, function(err, account){
+            account_dal.getAll(function(err, address) {
+                res.render('account/accountUpdate', {account: account});
             });
         });
     }

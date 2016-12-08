@@ -1,6 +1,6 @@
-<%- include("../includes/header.ejs", {title: "Update " + account.account_name}); %>
+<%- include("../includes/header.ejs", {title: "Update " + account.account_id}); %>
 
-<h1>Update <%= account.account_name%></h1>
+<h1>Update <%= account.account_id%></h1>
 <form action="/account/update" method="get">
 
     <input type="hidden" id="account_id" name="account_id" value="<%= account.account_id %>">
