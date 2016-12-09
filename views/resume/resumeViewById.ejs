@@ -9,6 +9,19 @@
                 <% } %>
             </ul>
         </li>
+
+        <li>Company/Companies:
+            <% for(var i=0; result.length > i; i++ ) { %>
+        <li><%= result[i].company_name %></li>
+        <% } %>
+        </li>
+
+        <li>School(s):
+            <% for(var i=0; result.length > i; i++ ) { %>
+        <li><%= result[i].school_name %></li>
+        <% } %>
+        </li>
+
     </ul>
 
 <a href="/resume/all"><< back</a>
