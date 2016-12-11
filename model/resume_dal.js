@@ -15,10 +15,14 @@ exports.getAll = function(callback) {
 };
 
 exports.getById = function(resume_id, callback) {
-    var query = 'SELECT r.*, s.skill_name, s.description FROM resume r ' +
+    var query = 'SELECT r.*, s.skill_name, s.description, rc.company_id, c.company_name, sch.school_name FROM resume r ' +
     'LEFT JOIN resume_skill rs on rs.resume_id = r.resume_id ' +
     'LEFT JOIN skill s on s.skill_id = rs.skill_id ' +
-    'WHERE r.resume_id = ?';
+    'LEFT JOIN resume_company rc on rc.resume_id = r.resume_id ' +
+    'LEFT JOIN company c on c.company_id = rc.company_id ' +
+    'LEFT JOIN resume_school rsch on rsch.resume_id = r.resume_id ' +
+    'LEFT JOIN school sch on sch.school_id = rsch.school_id ' +
+    'WHERE r.resume_id = ? ';
     var queryData = [resume_id];
 
     connection.query(query, queryData, function(err, result) {
@@ -57,10 +61,35 @@ exports.insert = function(params, callback) {
                         //callback(err, result)
                     //}
             //
-            callback(err, result);
+
+            //RESUME COMPANY INSERT
+            var company_id = result.insertId;
+            var query = 'INSERT INTO resume_company (resume_id, company_id) VALUES ?';
+            var resumeCompanyData = [];
+            for(var i=0; i < params.company_id.length; i++) {
+                resumeCompanyData.push([resume_id, params.company_id[i]]);
+            }
+
+            connection.query(query, [resumeCompanyData], function(err, result){
+                //RESUME SCHOOLS INSERT
+                var school_id = result.insertId;
+                var query = 'INSERT INTO resume_school (resume_id, school_id) VALUES ?';
+                var resumeSchoolData = [];
+                for(var i=0; i < params.school_id.length; i++) {
+                    resumeSchoolData.push([resume_id, params.school_id[i]]);
+                }
+
+                connection.query(query, [resumeSchoolData], function(err, result){
+
+                    callback(err, result);
+                });
+
+                //callback(err, result);
+            });
+
+            //callback(err, result);
         });
     });
-
 };
 
 /*  OLD INSERT
