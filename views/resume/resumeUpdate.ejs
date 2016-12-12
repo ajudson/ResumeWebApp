@@ -4,25 +4,87 @@
 <form action="/resume/update" method="get">
     <input type="hidden" id="resume_id" name="resume_id" value="<%= resume.resume_id %>">
     Resume Name: <input id="resume_name" name="resume_name" type="text" value="<%= resume.resume_name%>"/>
+
+    <br />
+    <br />
+    Account <br />
+    <select id="account_id" name="account_id" multiple="multiple">
+        <% for(var i=0; account.length > i; i++ ) {
+            var selected = "";
+            for(var j=0; j < resume.length; j++)
+            {
+                if(account[i].account_id == resume[j].account_id) {
+                    selected = "selected";
+                }
+
+            }
+        %>
+        <option value="<%= account[i].account_id %>" <%= selected %> ><%= account[i].first_name %>  <%= account[i].last_name %>,  <%= account[i].email %> </option>
+        <% } %>
+    </select>
+
+
+
+
     <br />
     <br />
     Skill <br />
     <select id="skill_id" name="skill_id" multiple="multiple">
         <% for(var i=0; skill.length > i; i++ ) {
             var selected = "";
-
-            if(skill[i].resume_id != null) {
-                selected = "selected";
+            for(var j=0; j < uniqvalues.skill.length; j++){
+                if(skill[i].skill_name == uniqvalues.skill[j]) {
+                    selected = "selected";
+                }
             }
         %>
         <option value="<%= skill[i].skill_id %>" <%= selected %> ><%= skill[i].skill_name %></option>
         <% } %>
     </select>
 
+    <br />
+    <br />
+    Company <br />
+    <select id="company_id" name="company_id" multiple="multiple">
+        <% for(var i=0; company.length > i; i++ ) {
+            var selected = "";
+            for(var j=0; j < uniqvalues.company.length; j++){
+                if(company[i].company_name == uniqvalues.company[j]) {
+                    selected = "selected";
+            }
+
+            }
+        %>
+        <option value="<%= company[i].company_id %>" <%= selected %> ><%= company[i].company_name %></option>
+        <% } %>
+    </select>
+
+    <br />
+    <br />
+    School <br />
+    <select id="school_id" name="school_id" multiple="multiple">
+        <% for(var i=0; school.length > i; i++ ) {
+            var selected = "";
+            for(var j=0; j < uniqvalues.school.length; j++){
+                if(school[i].school_name == uniqvalues.school[j]) {
+                    selected = "selected";
+                }
+
+            }
+        %>
+        <option value="<%= school[i].school_id %>" <%= selected %> ><%= school[i].school_name %></option>
+        <% } %>
+    </select>
+
+
+
+
     <!-- Initialize the multiselect plugin: -->
     <script type="text/javascript">
         $(document).ready(function() {
             $('#skill_id').multiselect();
+            $('#company_id').multiselect();
+            $('#school_id').multiselect();
         });
     </script>
 

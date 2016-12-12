@@ -81,6 +81,7 @@ exports.insert = function(params, callback) {
 
                 connection.query(query, [resumeSchoolData], function(err, result){
 
+
                     callback(err, result);
                 });
 
@@ -190,7 +191,15 @@ exports.update = function(params, callback) {
  */
 
 exports.edit = function(resume_id, callback) {
-    var query = 'CALL resume_getinfo(?)';
+    //var query = 'CALL resume_getinfo(?)';
+    var query = 'SELECT r.*, s.skill_name, s.description, rc.company_id, c.company_name, sch.school_name FROM resume r ' +
+        'LEFT JOIN resume_skill rs on rs.resume_id = r.resume_id ' +
+        'LEFT JOIN skill s on s.skill_id = rs.skill_id ' +
+        'LEFT JOIN resume_company rc on rc.resume_id = r.resume_id ' +
+        'LEFT JOIN company c on c.company_id = rc.company_id ' +
+        'LEFT JOIN resume_school rsch on rsch.resume_id = r.resume_id ' +
+        'LEFT JOIN school sch on sch.school_id = rsch.school_id ' +
+        'WHERE r.resume_id = ? ';
     var queryData = [resume_id];
 
     connection.query(query, queryData, function(err, result) {

@@ -30,7 +30,37 @@ router.get('/', function(req, res){
                 res.send(err);
             }
             else {
-                res.render('resume/resumeViewById', {'result': result});
+                school = [result.length];
+                skill = [result.length];
+                company = [result.length];
+
+                for(var i=0; i < result.length; i++){
+                    skill[i] = result[i].skill_name, result[i].description;
+                }
+
+                for(var i=0; i < result.length; i++){
+                    company[i] = result[i].company_name;
+                }
+
+                for(var i=0; i < result.length; i++){
+                    school[i] = result[i].school_name;
+                }
+
+
+                var uniq_skill = skill.filter(function (elem, index, self) {
+                    return index == self.indexOf(elem);
+                });
+
+                var uniq_company = company.filter(function (elem, index, self) {
+                    return index == self.indexOf(elem);
+                });
+
+                var uniq_school = school.filter(function (elem, index, self) {
+                    return index == self.indexOf(elem);
+                });
+
+
+                res.render('resume/resumeViewById', {'result': result, 'skill': uniq_skill, 'company': uniq_company, 'school': uniq_school});
             }
         });
     }
@@ -87,6 +117,107 @@ router.get('/edit', function(req, res){
         res.send('A resume id is required');
     }
     else {
+        account_dal.getAll(function (err, accountres) {
+            if (err) {
+                res.send(err)
+            }
+            else {
+                skill_dal.getAll(function (err, skillres) {
+
+                    if (err) {
+                        res.send(err)
+                    }
+                    else {
+                        company_dal.getAll(function (err, companyres) {
+                            if (err) {
+                                res.send(err)
+                            }
+                            else {
+                                school_dal.getAll(function (err, schoolres) {
+                                    if (err) {
+                                        res.send(err)
+                                    }
+                                    else {
+                                        resume_dal.edit(req.query.resume_id, function (err, resumeres) {
+                                            if (err) {
+                                                res.send(err)
+                                            }
+                                            else {
+                                                var skill = [skillres.length];
+                                                var company = [companyres.length];
+                                                var school = [schoolres.length];
+
+                                                for (var i = 0; i < resumeres.length; i++) {
+                                                    skill[i] = resumeres[i].skill_name;
+                                                }
+                                                var uniqskill = skill.filter(function (elem, index, self){
+                                                   return index == self.indexOf(elem);
+                                                });
+
+
+                                                for (var i = 0; i < resumeres.length; i++) {
+                                                    console.log(i);
+                                                    company[i] = resumeres[i].company_name;
+                                                    console.log(company[i]);
+                                                }
+                                                var uniqcompany = company.filter(function (elem, index, self){
+                                                    return index == self.indexOf(elem);
+                                                });
+
+
+                                                for (var i = 0; i < resumeres.length; i++) {
+                                                    school[i] = resumeres[i].school_name;
+                                                }
+                                                var uniqschool = school.filter(function (elem, index, self){
+                                                    return index == self.indexOf(elem);
+                                                });
+
+                                                uniqvalues = {'skill': uniqskill, 'company': uniqcompany, 'school': uniqschool};
+
+                                                console.log(uniqcompany);
+                                                console.log(company);
+
+                                                res.render('resume/resumeUpdate', {
+                                                   'uniqvalues': uniqvalues, 'account': accountres, 'resume': resumeres[0], 'skill': skillres, 'company': companyres, 'school': schoolres
+                                                });
+
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
+
+/* OLD EDIT
+router.get('/edit', function(req, res){
+    if(req.query.resume_id == null) {
+        res.send('A resume id is required');
+    }
+    else {
         resume_dal.edit(req.query.resume_id, function(err, result){
             console.log(result);
             res.render('resume/resumeUpdate', {resume: result[0][0], skill: result[1]});
@@ -94,6 +225,7 @@ router.get('/edit', function(req, res){
     }
 
 });
+*/
 
 router.get('/edit2', function(req, res){
     if(req.query.resume_id == null) {

@@ -4,24 +4,24 @@
         <li>Resume Name: <%= result[0].resume_name %></li>
         <li>Skill(s):
             <ul>
-                <% for(var i=0; result.length > i; i++ ) { %>
-                <li><%= result[i].skill_name + ': ' + result[i].description %></li>
+                <% for(var i=0; skill.length > i; i++ ) { %>
+                <li><%= skill[i] %></li>
                 <% } %>
             </ul>
         </li>
 
         <li>Company/Companies:
             <ul>
-                <% for(var i=0; result.length > i; i++ ) { %>
-                <li><%= result[i].company_name %></li>
+                <% for(var i=0; company.length > i; i++ ) { %>
+                <li><%= company[i] %></li>
                 <% } %>
             </ul>
         </li>
 
         <li>School(s):
             <ul>
-                <% for(var i=0; result.length > i; i++ ) { %>
-                <li><%= result[i].school_name %></li>
+                <% for(var i=0; school.length > i; i++ ) { %>
+                <li><%= school[i] %></li>
                 <% } %>
             </ul>
         </li>
