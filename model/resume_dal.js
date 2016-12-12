@@ -118,6 +118,7 @@ exports.delete = function(resume_id, callback) {
 
 };
 
+// INSERTS //
 //declare the function so it can be used locally
 var resumeSkillInsert = function(resume_id, skillIdArray, callback){
     // NOTE THAT THERE IS ONLY ONE QUESTION MARK IN VALUES ?
@@ -135,6 +136,36 @@ var resumeSkillInsert = function(resume_id, skillIdArray, callback){
 //export the same function so it can be used by external callers
 module.exports.resumeSkillInsert = resumeSkillInsert;
 
+var resumeCompanyInsert = function(resume_id, companyIdArray, callback){
+    var query = 'INSERT INTO resume_company (resume_id, company_id) VALUES ?';
+    var resumeCompanyData = [];
+    for(var i=0; i < companyIdArray.length; i++) {
+        resumeCompanyData.push([resume_id, companyIdArray[i]]);
+    }
+    connection.query(query, [resumeCompanyData], function(err, result){
+        callback(err, result);
+    });
+};
+module.exports.resumeCompanyInsert = resumeCompanyInsert;
+
+var resumeSchoolInsert = function(resume_id, schoolIdArray, callback){
+    var query = 'INSERT INTO resume_school (resume_id, school_id) VALUES ?';
+    var resumeSchoolData = [];
+    for(var i=0; i < schoolIdArray.length; i++) {
+        resumeSchoolData.push([resume_id, schoolIdArray[i]]);
+    }
+    connection.query(query, [resumeSchoolData], function(err, result){
+       callback(err, result);
+    });
+}
+module.exports.resumeSchoolInsert = resumeSchoolInsert;
+
+
+
+
+
+
+// DELETES //
 //declare the function so it can be used locally
 var resumeSkillDeleteAll = function(resume_id, callback){
     var query = 'DELETE FROM resume_skill WHERE resume_id = ?';
@@ -147,6 +178,62 @@ var resumeSkillDeleteAll = function(resume_id, callback){
 //export the same function so it can be used by external callers
 module.exports.resumeSkillDeleteAll = resumeSkillDeleteAll;
 
+var resumeCompanyDeleteAll = function(resume_id, callback){
+    var query = 'DELETE FROM resume_company WHERE resume_id = ?';
+    var queryData = [resume_id];
+
+    connection.query(query, queryData, function(err, result) {
+        callback(err, result);
+    });
+};
+module.exports.resumeCompanyDeleteAll = resumeCompanyDeleteAll;
+
+var resumeSchoolDeleteAll = function(resume_id, callback){
+    var query = 'DELETE FROM resume_school WHERE resume_id = ?';
+    var queryData = [resume_id];
+
+    connection.query(query, queryData, function(err, result){
+        callback(err, result);
+    });
+};
+module.exports.resumeSchoolDeleteAll = resumeSchoolDeleteAll;
+
+exports.update = function(params, callback) {
+    var query = 'UPDATE resume SET resume_skill = ? WHERE resume_id = ?';
+
+    var queryData = [params.resume_name, params.resume_id];
+
+    connection.query(query, queryData, function(err, result) {
+        //delete resume_skill, resume_company, and resume_school entries for this resume
+        resumeSkillDeleteAll(params.resume_id, function(err, result){
+            resumeCompanyDeleteAll(params.resume_id, function(err, result){
+                resumeSchoolDeleteAll(params.resume_id, function(err, result){
+
+                    //insert resume_skill, resume_company, and resume_school entries for this resume
+                    if(params.resume_id != null) {
+                        resumeSkillInsert(params.resume_id, params.skill_id, function(err, result){
+                            if(params.company_id != null){
+                                resumeCompanyInsert(params.resume_id, params.company_id, function(err, result){
+                                    if(params.school_id != null){
+                                        resumeSchoolInsert(params.resume_id, params.school_id, function(err, result){
+                                            callback(err, result);
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else {
+                        callback(err, result);
+                    }
+                });
+            });
+        });
+    });
+};
+
+
+/* OLD UPDATE
 exports.update = function(params, callback) {
     var query = 'UPDATE resume SET resume_skill = ? WHERE resume_id = ?';
 
@@ -168,6 +255,7 @@ exports.update = function(params, callback) {
 
     });
 };
+*/
 
 /*  Stored procedure used in this example
  DROP PROCEDURE IF EXISTS resume_getinfo;
