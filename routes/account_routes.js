@@ -79,7 +79,7 @@ router.get('/edit', function(req, res){
     else {
         account_dal.edit(req.query.account_id, function(err, result){
             console.log(result);
-            res.render('account/accountUpdate', {account: result[0][0]});
+            res.render('account/accountUpdate', {account: result[0]});
         });
     }
 
@@ -97,6 +97,12 @@ router.get('/edit2', function(req, res){
         });
     }
 
+});
+
+router.get('/update', function(req, res) {
+    account_dal.update(req.query, function(err, result){
+        res.redirect(302, '/account/all');
+    });
 });
 
 // Delete an account for the given account_id
