@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var resume_dal = require('../model/resume_dal');
 var account_dal = require('../model/account_dal');
-
 var skill_dal = require('../model/skill_dal');
 var company_dal = require('../model/company_dal');
 var school_dal = require('../model/school_dal');
