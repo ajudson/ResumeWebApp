@@ -26,6 +26,7 @@ exports.getById = function(resume_id, callback) {
     var queryData = [resume_id];
 
     connection.query(query, queryData, function(err, result) {
+        console.log(result);
         callback(err, result);
     });
 };
@@ -80,7 +81,7 @@ exports.insert = function(params, callback) {
                 }
 
                 connection.query(query, [resumeSchoolData], function(err, result){
-
+                    console.log([resumeSchoolData]);
 
                     callback(err, result);
                 });
